@@ -23,6 +23,10 @@ weather_subset$HOURLYPrecip <-str_remove(weather_subset$HOURLYPrecip,pattern="s$
 unique(weather_subset$HOURLYPrecip)
 #verify replacement
 glimpse(weather_subset)
+#convert to numeric
+weather_subset$HOURLYPrecip <- as.numeric(weather_subset$HOURLYPrecip)
+weather_subset$HOURLYPrecip <- as.numeric(weather_subset$HOURLYWindSpeed)
+glimpse(weather_subset)
 #rename columns
 weather_cleaned <- weather_subset %>%
 +     rename(relative_humidity = HOURLYRelativeHumidity)%>%
@@ -31,6 +35,11 @@ weather_cleaned <- weather_subset %>%
 +     rename(wind_speed = HOURLYWindSpeed)%>%
 +     rename(station_pressure = HOURLYStationPressure)
 > weather_cleaned
+> #split data into training set
+> set.seed(1234)
+> weather_split <- initial_split(weather_cleaned, prop = 4/5)
+> train_data <- training(weather_split)
+> test_data <- testing(weather_split)
 > #histograms
 > gplot(data=weather_cleaned,aes(relative_humidity))+geom_histogram()
 > ggplot(data=weather_cleaned,aes(dry_bulb_temp_f))+geom_histogram()
@@ -45,3 +54,12 @@ weather_cleaned <- weather_subset %>%
 > boxplot(weather_cleaned$station_pressure)
 #plot using precip as target variable
 plot(precip ~ station_pressure+wind_speed+relative_humidity+dry_bulb_temp_f, weather_cleaned)
+#run linear regression
+ lm.model=lm(precip ~ relative_humidity,data=weather_cleaned)
+ summary(lm.model)
+lm.model=lm(precip ~ dry_bulb_temp_f,data=weather_cleaned)
+summary(lm.model)
+lm.model=lm(precip ~ wind_speed,data=weather_cleaned)
+summary(lm.model)
+lm.model=lm(precip ~ station_pressure,data=weather_cleaned)
+summary(lm.model)
