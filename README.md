@@ -25,7 +25,10 @@ unique(weather_subset$HOURLYPrecip)
 glimpse(weather_subset)
 #convert to numeric
 weather_subset$HOURLYPrecip <- as.numeric(weather_subset$HOURLYPrecip)
-weather_subset$HOURLYPrecip <- as.numeric(weather_subset$HOURLYWindSpeed)
+weather_subset$HOURLYWindSpeed <- as.numeric(weather_subset$HOURLYWindSpeed)
+weather_subset$HOURLYRelativeHumidity <- as.numeric(weather_subset$HOURLYRelativeHumidity)
+weather_subset$HOURLYDRYBULBTEMPF <- as.numeric(weather_subset$HOURLYDRYBULBTEMPF)
+weather_subset$HOURLYStationPressure <- as.numeric(weather_subset$HOURLYStationPressure)
 glimpse(weather_subset)
 #rename columns
 weather_cleaned <- weather_subset %>%
@@ -33,7 +36,7 @@ weather_cleaned <- weather_subset %>%
 +     rename(dry_bulb_temp_f = HOURLYDRYBULBTEMPF)%>%
 +     rename(precip = HOURLYPrecip)%>%
 +     rename(wind_speed = HOURLYWindSpeed)%>%
-+     rename(station_pressure = HOURLYStationPressure)
++     weather_cleaned
 > weather_cleaned
 > #split data into training set
 > set.seed(1234)
@@ -41,7 +44,7 @@ weather_cleaned <- weather_subset %>%
 > train_data <- training(weather_split)
 > test_data <- testing(weather_split)
 > #histograms
-> gplot(data=weather_cleaned,aes(relative_humidity))+geom_histogram()
+> ggplot(data=weather_cleaned,aes(relative_humidity))+geom_histogram()
 > ggplot(data=weather_cleaned,aes(dry_bulb_temp_f))+geom_histogram()
 > ggplot(data=weather_cleaned,aes(precip))+(stat_count(width = .5))
 > ggplot(data=weather_cleaned,aes(wind_speed))+geom_histogram()
